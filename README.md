@@ -4,19 +4,19 @@
 
 * Langkah awal yang dilakukan adalah men-download file nature.zip. Kemudian membuat file nano soal1.sh yang berisi source code seperti ini :
 
-     #!/bin/bash
+          #!/bin/bash
 
-    unzip /home/putri/sisop/nature.zip -d /home/putri/sisop
-    mkdir /home/putri/sisop/nature_gambar
+         unzip /home/putri/sisop/nature.zip -d /home/putri/sisop
+         mkdir /home/putri/sisop/nature_gambar
 
-    i="1"
-    for var in /home/putri/sisop/nature/*.jpg
-    do
-    base64 -d $var | xxd -r > /home/putri/sisop/nature_gambar/$i.jpg
-    i=$(($i + 1))
-    done
-    Crontab : 14 14 14 2 * /bin/bash /home/putri/sisop/soal1.sh
-                    14 14 * 2 5 /bin/bash /home/putri/sisop/soal1.sh
+         i="1"
+         for var in /home/putri/sisop/nature/*.jpg
+         do
+         base64 -d $var | xxd -r > /home/putri/sisop/nature_gambar/$i.jpg
+         i=$(($i + 1))
+         done
+         Crontab : 14 14 14 2 * /bin/bash /home/putri/sisop/soal1.sh
+                         14 14 * 2 5 /bin/bash /home/putri/sisop/soal1.sh
 
 *	Dari source code diatas, file nature.zip di unzip terlebih dahulu dan hasil file unzip an nya di letakkan pada file sisop. Kemudian membuat folder bernama nature_gambar untuk menyimpan file gambar yang sudah terbuka.
 * Di iterisas i=1. Untuk semua file gambar pada file nature maka di lakukan base64 kemudian di hexdump agar file yang terdapat pada file tersebut bisa terbuka, kemudian file yang sudah bisa terbuka di simpan ke dalam folder bernama nature_gambar. Kemudian lakukan looping agar banyak gambar yang terdapat pada file tersebut dapat melakukan perintah.
@@ -60,19 +60,19 @@ d.	Password yang dihasilkan tidak boleh sama.
 
 * Langkah pertama yaitu buatlah file nano soal3.sh yang berisi :
 
-    #!/bin/bash
+         #!/bin/bash
 
-    i=1
-    no=1
-    while [ $i -ne 0 ]
-    do
-    if [[ -f /home/putri/sisop/hasilno3/password$no.txt ]]; then
-       no=$((no + 1))
-       else
-    cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 12 | head -n 1 > /home/putri/sisop/hasilno3/password$no.txt
-    i=0
-    fi
-    done
+         i=1
+         no=1
+         while [ $i -ne 0 ]
+         do
+         if [[ -f /home/putri/sisop/hasilno3/password$no.txt ]]; then
+            no=$((no + 1))
+            else
+         cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 12 | head -n 1 > /home/putri/sisop/hasilno3/password$no.txt
+         i=0
+         fi
+         done
 
 * Berdasarkan source code diatas, diinisialisasi variabel i=1 dan variabel no=1, kemudian dimana i != 0 maka jika misal pada folder hasilno3 terdapat password1.txt kemudian akan meng create password.txt baru dengan format $no + 1, maka jika password1.txt sudah ada maka akan create password2.txt. Tetapi jika password 1 tidak ada maka buat password baru diambil dari urandom abjad a-z atau 0-9 atau huruf besar dan kecil, dimana hanya satu baris saja yang diambil dan tidak boleh lebih dari 12 karakter, kemudian password tersebut disimpan di folder hasilno3. Kemudian iterasi i=0 adalah untuk menghetikan looping agar tidak terus menerus berjalan. 
 
@@ -91,7 +91,7 @@ d.	Jalankan script tadi setiap 6 menit dari menit ke 2 hingga 30, contoh 13:02, 
 
 * Untuk lebih memahami, terlebih dulu membuka folder /var/log kemudian cat syslog. Dialam file tersebut terdapat banyak sekali record dan juga field yang terdapat banyak sekali kata dan character di dalamnya. Kemudian buatlah file nano soal5.sh yang berisi source code dibawah ini :
 
-    awk '/cron/ || /CRON/,!/sudo/' /var/log/syslog | awk 'NF < 13' >> /home/putri/modul1/nomor5.log
-    Crontab : 2-30/6 * * * * /bin/bash /home/putri/sisop/soal5.sh
+         awk '/cron/ || /CRON/,!/sudo/' /var/log/syslog | awk 'NF < 13' >> /home/putri/modul1/nomor5.log
+         Crontab : 2-30/6 * * * * /bin/bash /home/putri/sisop/soal5.sh
 
 * Berdasarkan source code diatas, menggunakan awk yaitu mencari kata cron yang dengan huruf kecil atau CRON menggunakan huruf besar tetapi kata yang tidak mengandung string sudo pada file /var/log/syslog tersebut dan number field nya dibatasi tidak boleh lebih dari 13 field/kolom. Kemudian record tadi di simpan ke dalam folder bernama modul1 dan dalam bentuk file .log. Agar script tersebut berjalan sesuai perintah soal, maka tambahkan crontab yaitu script akan berjalan setiap 6 menit pada menit ke 2-30. 
